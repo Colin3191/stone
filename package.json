@@ -1,0 +1,13 @@
+{
+  "name": "stone",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup index.js -o /dist/test.js",
+    "start": "yarn build && node /dist/test.js"
+  },
+  "devDependencies": {
+    "rollup": "^2.61.1"
+  }
+}
