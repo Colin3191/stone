@@ -1,7 +1,80 @@
-import { NumberToken, StringToken, IdentifierToken, Token } from "./Token";
+class Token {
+  /**end of file */
+  static EOF = new Token(-1);
+  /**end of line */
+  static EOL = "\n";
+  line;
+  constructor(line) {
+    this.line = line;
+  }
+  getLineNumber() {
+    return this.line;
+  }
+  isIdentifier() {
+    return false;
+  }
+  isNumber() {
+    return false;
+  }
+  isString() {
+    return false;
+  }
+  getNumber() {
+    throw Error("not number token");
+  }
+  getText() {
+    return "";
+  }
+}
+
+class NumberToken extends Token {
+  value;
+  constructor(line, val) {
+    super(line);
+    this.value = val;
+  }
+  isNumber() {
+    return true;
+  }
+  getText() {
+    return this.value.toString();
+  }
+  getNumber() {
+    return this.value;
+  }
+}
+
+class IdentifierToken extends Token {
+  text;
+  constructor(line, id) {
+    super(line);
+    this.text = id;
+  }
+  isIdentifier() {
+    return true;
+  }
+  getText() {
+    return this.text();
+  }
+}
+
+class StringToken extends Token {
+  literal;
+  constructor(line, str) {
+    super(line);
+    this.literal = str;
+  }
+  isString() {
+    return true;
+  }
+  getText() {
+    return this.literal();
+  }
+}
+
 const readLine = require("readline");
 const fs = require("fs");
-export class Lexer {
+class Lexer {
   static pattern =
     /\s*((\/\/.*)|([0-9]+)|("(\\|\\\\|\\"|\\n|[^"])*")|([a-zA-Z_][a-zA-Z_0-9]*|==|<=|>=|&&|\|\||=|<|>))?/g;
   queue = [];
@@ -50,3 +123,9 @@ export class Lexer {
     }
   }
 }
+
+let lexer = new Lexer("test.txt");
+
+lexer.readLine.on("close", () => {
+  console.log(lexer.queue);
+});
